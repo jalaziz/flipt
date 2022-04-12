@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var _ flipt.FliptServer = &Server{}
+var _ flipt.FliptServiceServer = &Server{}
 
 type Option func(s *Server)
 
@@ -22,7 +22,8 @@ type Option func(s *Server)
 type Server struct {
 	logger logrus.FieldLogger
 	store  storage.Store
-	flipt.UnimplementedFliptServer
+	flipt.UnimplementedFliptEvaluationServiceServer
+	flipt.UnimplementedFliptServiceServer
 }
 
 // New creates a new Server
@@ -50,6 +51,10 @@ func (s *Server) ValidationUnaryInterceptor(ctx context.Context, req interface{}
 	}
 
 	return handler(ctx, req)
+}
+
+func (s *Server) EvaluationOnlyUnaryInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+
 }
 
 // ErrorUnaryInterceptor intercepts known errors and returns the appropriate GRPC status code

@@ -10,7 +10,10 @@
   },
   "tags": [
     {
-      "name": "Flipt"
+      "name": "FliptEvaluationService"
+    },
+    {
+      "name": "FliptService"
     }
   ],
   "schemes": [

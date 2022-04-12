@@ -447,7 +447,7 @@ message DeleteDistributionRequest {
   string variant_id = 4;
 }
 
-service Flipt {
+service FliptEvaluationService {
   rpc Evaluate(EvaluationRequest) returns (EvaluationResponse) {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       operation_id: "evaluate";
@@ -471,7 +471,9 @@ service Flipt {
       tags: "flags";
     };
   }
+}
 
+service FliptService {
   rpc ListFlags(ListFlagRequest) returns (FlagList) {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       operation_id: "listFlags";

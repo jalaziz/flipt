@@ -450,7 +450,7 @@ func run(_ []string) error {
 		}
 
 		grpcServer = grpc.NewServer(grpcOpts...)
-		pb.RegisterFliptServer(grpcServer, srv)
+		pb.RegisterFliptServiceServer(grpcServer, srv)
 		grpc_prometheus.EnableHandlingTimeHistogram()
 		grpc_prometheus.Register(grpcServer)
 		reflection.Register(grpcServer)
@@ -501,7 +501,7 @@ func run(_ []string) error {
 			return fmt.Errorf("connecting to grpc server: %w", err)
 		}
 
-		if err := pb.RegisterFliptHandler(ctx, api, conn); err != nil {
+		if err := pb.RegisterFliptServiceHandler(ctx, api, conn); err != nil {
 			return fmt.Errorf("registering grpc gateway: %w", err)
 		}
 

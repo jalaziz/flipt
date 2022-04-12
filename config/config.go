@@ -50,13 +50,16 @@ type CacheConfig struct {
 }
 
 type ServerConfig struct {
-	Host      string `json:"host,omitempty"`
-	Protocol  Scheme `json:"protocol,omitempty"`
-	HTTPPort  int    `json:"httpPort,omitempty"`
-	HTTPSPort int    `json:"httpsPort,omitempty"`
-	GRPCPort  int    `json:"grpcPort,omitempty"`
-	CertFile  string `json:"certFile,omitempty"`
-	CertKey   string `json:"certKey,omitempty"`
+	Host                string `json:"host,omitempty"`
+	Protocol            Scheme `json:"protocol,omitempty"`
+	HTTPPort            int    `json:"httpPort,omitempty"`
+	HTTPSPort           int    `json:"httpsPort,omitempty"`
+	GRPCPort            int    `json:"grpcPort,omitempty"`
+	EvaluationHTTPPort  int    `json:"evaluationHttpPort,omitempty"`
+	EvaluationHTTPSPort int    `json:"evaluationHttpsPort,omitempty"`
+	EvaluationGRPCPort  int    `json:"evaluationGrpcPort,omitempty"`
+	CertFile            string `json:"certFile,omitempty"`
+	CertKey             string `json:"certKey,omitempty"`
 }
 
 type JaegerTracingConfig struct {
