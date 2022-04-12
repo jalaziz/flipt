@@ -19,169 +19,13 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// FliptEvaluationServiceClient is the client API for FliptEvaluationService service.
+// FliptClient is the client API for Flipt service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FliptEvaluationServiceClient interface {
+type FliptClient interface {
 	Evaluate(ctx context.Context, in *EvaluationRequest, opts ...grpc.CallOption) (*EvaluationResponse, error)
 	BatchEvaluate(ctx context.Context, in *BatchEvaluationRequest, opts ...grpc.CallOption) (*BatchEvaluationResponse, error)
 	GetFlag(ctx context.Context, in *GetFlagRequest, opts ...grpc.CallOption) (*Flag, error)
-}
-
-type fliptEvaluationServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewFliptEvaluationServiceClient(cc grpc.ClientConnInterface) FliptEvaluationServiceClient {
-	return &fliptEvaluationServiceClient{cc}
-}
-
-func (c *fliptEvaluationServiceClient) Evaluate(ctx context.Context, in *EvaluationRequest, opts ...grpc.CallOption) (*EvaluationResponse, error) {
-	out := new(EvaluationResponse)
-	err := c.cc.Invoke(ctx, "/flipt.FliptEvaluationService/Evaluate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *fliptEvaluationServiceClient) BatchEvaluate(ctx context.Context, in *BatchEvaluationRequest, opts ...grpc.CallOption) (*BatchEvaluationResponse, error) {
-	out := new(BatchEvaluationResponse)
-	err := c.cc.Invoke(ctx, "/flipt.FliptEvaluationService/BatchEvaluate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *fliptEvaluationServiceClient) GetFlag(ctx context.Context, in *GetFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
-	out := new(Flag)
-	err := c.cc.Invoke(ctx, "/flipt.FliptEvaluationService/GetFlag", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// FliptEvaluationServiceServer is the server API for FliptEvaluationService service.
-// All implementations must embed UnimplementedFliptEvaluationServiceServer
-// for forward compatibility
-type FliptEvaluationServiceServer interface {
-	Evaluate(context.Context, *EvaluationRequest) (*EvaluationResponse, error)
-	BatchEvaluate(context.Context, *BatchEvaluationRequest) (*BatchEvaluationResponse, error)
-	GetFlag(context.Context, *GetFlagRequest) (*Flag, error)
-	mustEmbedUnimplementedFliptEvaluationServiceServer()
-}
-
-// UnimplementedFliptEvaluationServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedFliptEvaluationServiceServer struct {
-}
-
-func (UnimplementedFliptEvaluationServiceServer) Evaluate(context.Context, *EvaluationRequest) (*EvaluationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Evaluate not implemented")
-}
-func (UnimplementedFliptEvaluationServiceServer) BatchEvaluate(context.Context, *BatchEvaluationRequest) (*BatchEvaluationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BatchEvaluate not implemented")
-}
-func (UnimplementedFliptEvaluationServiceServer) GetFlag(context.Context, *GetFlagRequest) (*Flag, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFlag not implemented")
-}
-func (UnimplementedFliptEvaluationServiceServer) mustEmbedUnimplementedFliptEvaluationServiceServer() {
-}
-
-// UnsafeFliptEvaluationServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FliptEvaluationServiceServer will
-// result in compilation errors.
-type UnsafeFliptEvaluationServiceServer interface {
-	mustEmbedUnimplementedFliptEvaluationServiceServer()
-}
-
-func RegisterFliptEvaluationServiceServer(s grpc.ServiceRegistrar, srv FliptEvaluationServiceServer) {
-	s.RegisterService(&FliptEvaluationService_ServiceDesc, srv)
-}
-
-func _FliptEvaluationService_Evaluate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EvaluationRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FliptEvaluationServiceServer).Evaluate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/flipt.FliptEvaluationService/Evaluate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptEvaluationServiceServer).Evaluate(ctx, req.(*EvaluationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _FliptEvaluationService_BatchEvaluate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchEvaluationRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FliptEvaluationServiceServer).BatchEvaluate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/flipt.FliptEvaluationService/BatchEvaluate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptEvaluationServiceServer).BatchEvaluate(ctx, req.(*BatchEvaluationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _FliptEvaluationService_GetFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFlagRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FliptEvaluationServiceServer).GetFlag(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/flipt.FliptEvaluationService/GetFlag",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptEvaluationServiceServer).GetFlag(ctx, req.(*GetFlagRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// FliptEvaluationService_ServiceDesc is the grpc.ServiceDesc for FliptEvaluationService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var FliptEvaluationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "flipt.FliptEvaluationService",
-	HandlerType: (*FliptEvaluationServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Evaluate",
-			Handler:    _FliptEvaluationService_Evaluate_Handler,
-		},
-		{
-			MethodName: "BatchEvaluate",
-			Handler:    _FliptEvaluationService_BatchEvaluate_Handler,
-		},
-		{
-			MethodName: "GetFlag",
-			Handler:    _FliptEvaluationService_GetFlag_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "flipt.proto",
-}
-
-// FliptServiceClient is the client API for FliptService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FliptServiceClient interface {
 	ListFlags(ctx context.Context, in *ListFlagRequest, opts ...grpc.CallOption) (*FlagList, error)
 	CreateFlag(ctx context.Context, in *CreateFlagRequest, opts ...grpc.CallOption) (*Flag, error)
 	UpdateFlag(ctx context.Context, in *UpdateFlagRequest, opts ...grpc.CallOption) (*Flag, error)
@@ -208,234 +52,264 @@ type FliptServiceClient interface {
 	DeleteConstraint(ctx context.Context, in *DeleteConstraintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type fliptServiceClient struct {
+type fliptClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFliptServiceClient(cc grpc.ClientConnInterface) FliptServiceClient {
-	return &fliptServiceClient{cc}
+func NewFliptClient(cc grpc.ClientConnInterface) FliptClient {
+	return &fliptClient{cc}
 }
 
-func (c *fliptServiceClient) ListFlags(ctx context.Context, in *ListFlagRequest, opts ...grpc.CallOption) (*FlagList, error) {
+func (c *fliptClient) Evaluate(ctx context.Context, in *EvaluationRequest, opts ...grpc.CallOption) (*EvaluationResponse, error) {
+	out := new(EvaluationResponse)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/Evaluate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fliptClient) BatchEvaluate(ctx context.Context, in *BatchEvaluationRequest, opts ...grpc.CallOption) (*BatchEvaluationResponse, error) {
+	out := new(BatchEvaluationResponse)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/BatchEvaluate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fliptClient) GetFlag(ctx context.Context, in *GetFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
+	out := new(Flag)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/GetFlag", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fliptClient) ListFlags(ctx context.Context, in *ListFlagRequest, opts ...grpc.CallOption) (*FlagList, error) {
 	out := new(FlagList)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/ListFlags", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/ListFlags", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateFlag(ctx context.Context, in *CreateFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
+func (c *fliptClient) CreateFlag(ctx context.Context, in *CreateFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
 	out := new(Flag)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateFlag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateFlag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateFlag(ctx context.Context, in *UpdateFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
+func (c *fliptClient) UpdateFlag(ctx context.Context, in *UpdateFlagRequest, opts ...grpc.CallOption) (*Flag, error) {
 	out := new(Flag)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateFlag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateFlag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteFlag(ctx context.Context, in *DeleteFlagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteFlag(ctx context.Context, in *DeleteFlagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteFlag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteFlag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateVariant(ctx context.Context, in *CreateVariantRequest, opts ...grpc.CallOption) (*Variant, error) {
+func (c *fliptClient) CreateVariant(ctx context.Context, in *CreateVariantRequest, opts ...grpc.CallOption) (*Variant, error) {
 	out := new(Variant)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateVariant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateVariant", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateVariant(ctx context.Context, in *UpdateVariantRequest, opts ...grpc.CallOption) (*Variant, error) {
+func (c *fliptClient) UpdateVariant(ctx context.Context, in *UpdateVariantRequest, opts ...grpc.CallOption) (*Variant, error) {
 	out := new(Variant)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateVariant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateVariant", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteVariant(ctx context.Context, in *DeleteVariantRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteVariant(ctx context.Context, in *DeleteVariantRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteVariant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteVariant", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) GetRule(ctx context.Context, in *GetRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
+func (c *fliptClient) GetRule(ctx context.Context, in *GetRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
 	out := new(Rule)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/GetRule", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/GetRule", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) ListRules(ctx context.Context, in *ListRuleRequest, opts ...grpc.CallOption) (*RuleList, error) {
+func (c *fliptClient) ListRules(ctx context.Context, in *ListRuleRequest, opts ...grpc.CallOption) (*RuleList, error) {
 	out := new(RuleList)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/ListRules", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/ListRules", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) OrderRules(ctx context.Context, in *OrderRulesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) OrderRules(ctx context.Context, in *OrderRulesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/OrderRules", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/OrderRules", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateRule(ctx context.Context, in *CreateRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
+func (c *fliptClient) CreateRule(ctx context.Context, in *CreateRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
 	out := new(Rule)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateRule", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateRule", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateRule(ctx context.Context, in *UpdateRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
+func (c *fliptClient) UpdateRule(ctx context.Context, in *UpdateRuleRequest, opts ...grpc.CallOption) (*Rule, error) {
 	out := new(Rule)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateRule", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateRule", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteRule(ctx context.Context, in *DeleteRuleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteRule(ctx context.Context, in *DeleteRuleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteRule", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteRule", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateDistribution(ctx context.Context, in *CreateDistributionRequest, opts ...grpc.CallOption) (*Distribution, error) {
+func (c *fliptClient) CreateDistribution(ctx context.Context, in *CreateDistributionRequest, opts ...grpc.CallOption) (*Distribution, error) {
 	out := new(Distribution)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateDistribution", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateDistribution", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateDistribution(ctx context.Context, in *UpdateDistributionRequest, opts ...grpc.CallOption) (*Distribution, error) {
+func (c *fliptClient) UpdateDistribution(ctx context.Context, in *UpdateDistributionRequest, opts ...grpc.CallOption) (*Distribution, error) {
 	out := new(Distribution)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateDistribution", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateDistribution", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteDistribution(ctx context.Context, in *DeleteDistributionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteDistribution(ctx context.Context, in *DeleteDistributionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteDistribution", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteDistribution", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) GetSegment(ctx context.Context, in *GetSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
+func (c *fliptClient) GetSegment(ctx context.Context, in *GetSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
 	out := new(Segment)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/GetSegment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/GetSegment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) ListSegments(ctx context.Context, in *ListSegmentRequest, opts ...grpc.CallOption) (*SegmentList, error) {
+func (c *fliptClient) ListSegments(ctx context.Context, in *ListSegmentRequest, opts ...grpc.CallOption) (*SegmentList, error) {
 	out := new(SegmentList)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/ListSegments", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/ListSegments", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateSegment(ctx context.Context, in *CreateSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
+func (c *fliptClient) CreateSegment(ctx context.Context, in *CreateSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
 	out := new(Segment)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateSegment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateSegment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateSegment(ctx context.Context, in *UpdateSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
+func (c *fliptClient) UpdateSegment(ctx context.Context, in *UpdateSegmentRequest, opts ...grpc.CallOption) (*Segment, error) {
 	out := new(Segment)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateSegment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateSegment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteSegment(ctx context.Context, in *DeleteSegmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteSegment(ctx context.Context, in *DeleteSegmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteSegment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteSegment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) CreateConstraint(ctx context.Context, in *CreateConstraintRequest, opts ...grpc.CallOption) (*Constraint, error) {
+func (c *fliptClient) CreateConstraint(ctx context.Context, in *CreateConstraintRequest, opts ...grpc.CallOption) (*Constraint, error) {
 	out := new(Constraint)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/CreateConstraint", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/CreateConstraint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) UpdateConstraint(ctx context.Context, in *UpdateConstraintRequest, opts ...grpc.CallOption) (*Constraint, error) {
+func (c *fliptClient) UpdateConstraint(ctx context.Context, in *UpdateConstraintRequest, opts ...grpc.CallOption) (*Constraint, error) {
 	out := new(Constraint)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/UpdateConstraint", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/UpdateConstraint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *fliptServiceClient) DeleteConstraint(ctx context.Context, in *DeleteConstraintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *fliptClient) DeleteConstraint(ctx context.Context, in *DeleteConstraintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/flipt.FliptService/DeleteConstraint", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/flipt.Flipt/DeleteConstraint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FliptServiceServer is the server API for FliptService service.
-// All implementations must embed UnimplementedFliptServiceServer
+// FliptServer is the server API for Flipt service.
+// All implementations must embed UnimplementedFliptServer
 // for forward compatibility
-type FliptServiceServer interface {
+type FliptServer interface {
+	Evaluate(context.Context, *EvaluationRequest) (*EvaluationResponse, error)
+	BatchEvaluate(context.Context, *BatchEvaluationRequest) (*BatchEvaluationResponse, error)
+	GetFlag(context.Context, *GetFlagRequest) (*Flag, error)
 	ListFlags(context.Context, *ListFlagRequest) (*FlagList, error)
 	CreateFlag(context.Context, *CreateFlagRequest) (*Flag, error)
 	UpdateFlag(context.Context, *UpdateFlagRequest) (*Flag, error)
@@ -460,632 +334,707 @@ type FliptServiceServer interface {
 	CreateConstraint(context.Context, *CreateConstraintRequest) (*Constraint, error)
 	UpdateConstraint(context.Context, *UpdateConstraintRequest) (*Constraint, error)
 	DeleteConstraint(context.Context, *DeleteConstraintRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedFliptServiceServer()
+	mustEmbedUnimplementedFliptServer()
 }
 
-// UnimplementedFliptServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedFliptServiceServer struct {
+// UnimplementedFliptServer must be embedded to have forward compatible implementations.
+type UnimplementedFliptServer struct {
 }
 
-func (UnimplementedFliptServiceServer) ListFlags(context.Context, *ListFlagRequest) (*FlagList, error) {
+func (UnimplementedFliptServer) Evaluate(context.Context, *EvaluationRequest) (*EvaluationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Evaluate not implemented")
+}
+func (UnimplementedFliptServer) BatchEvaluate(context.Context, *BatchEvaluationRequest) (*BatchEvaluationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchEvaluate not implemented")
+}
+func (UnimplementedFliptServer) GetFlag(context.Context, *GetFlagRequest) (*Flag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFlag not implemented")
+}
+func (UnimplementedFliptServer) ListFlags(context.Context, *ListFlagRequest) (*FlagList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListFlags not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateFlag(context.Context, *CreateFlagRequest) (*Flag, error) {
+func (UnimplementedFliptServer) CreateFlag(context.Context, *CreateFlagRequest) (*Flag, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFlag not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateFlag(context.Context, *UpdateFlagRequest) (*Flag, error) {
+func (UnimplementedFliptServer) UpdateFlag(context.Context, *UpdateFlagRequest) (*Flag, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFlag not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteFlag(context.Context, *DeleteFlagRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteFlag(context.Context, *DeleteFlagRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFlag not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateVariant(context.Context, *CreateVariantRequest) (*Variant, error) {
+func (UnimplementedFliptServer) CreateVariant(context.Context, *CreateVariantRequest) (*Variant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateVariant not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateVariant(context.Context, *UpdateVariantRequest) (*Variant, error) {
+func (UnimplementedFliptServer) UpdateVariant(context.Context, *UpdateVariantRequest) (*Variant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateVariant not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteVariant(context.Context, *DeleteVariantRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteVariant(context.Context, *DeleteVariantRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteVariant not implemented")
 }
-func (UnimplementedFliptServiceServer) GetRule(context.Context, *GetRuleRequest) (*Rule, error) {
+func (UnimplementedFliptServer) GetRule(context.Context, *GetRuleRequest) (*Rule, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRule not implemented")
 }
-func (UnimplementedFliptServiceServer) ListRules(context.Context, *ListRuleRequest) (*RuleList, error) {
+func (UnimplementedFliptServer) ListRules(context.Context, *ListRuleRequest) (*RuleList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRules not implemented")
 }
-func (UnimplementedFliptServiceServer) OrderRules(context.Context, *OrderRulesRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) OrderRules(context.Context, *OrderRulesRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OrderRules not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateRule(context.Context, *CreateRuleRequest) (*Rule, error) {
+func (UnimplementedFliptServer) CreateRule(context.Context, *CreateRuleRequest) (*Rule, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRule not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateRule(context.Context, *UpdateRuleRequest) (*Rule, error) {
+func (UnimplementedFliptServer) UpdateRule(context.Context, *UpdateRuleRequest) (*Rule, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRule not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteRule(context.Context, *DeleteRuleRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteRule(context.Context, *DeleteRuleRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRule not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateDistribution(context.Context, *CreateDistributionRequest) (*Distribution, error) {
+func (UnimplementedFliptServer) CreateDistribution(context.Context, *CreateDistributionRequest) (*Distribution, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateDistribution not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateDistribution(context.Context, *UpdateDistributionRequest) (*Distribution, error) {
+func (UnimplementedFliptServer) UpdateDistribution(context.Context, *UpdateDistributionRequest) (*Distribution, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDistribution not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteDistribution(context.Context, *DeleteDistributionRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteDistribution(context.Context, *DeleteDistributionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDistribution not implemented")
 }
-func (UnimplementedFliptServiceServer) GetSegment(context.Context, *GetSegmentRequest) (*Segment, error) {
+func (UnimplementedFliptServer) GetSegment(context.Context, *GetSegmentRequest) (*Segment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSegment not implemented")
 }
-func (UnimplementedFliptServiceServer) ListSegments(context.Context, *ListSegmentRequest) (*SegmentList, error) {
+func (UnimplementedFliptServer) ListSegments(context.Context, *ListSegmentRequest) (*SegmentList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListSegments not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateSegment(context.Context, *CreateSegmentRequest) (*Segment, error) {
+func (UnimplementedFliptServer) CreateSegment(context.Context, *CreateSegmentRequest) (*Segment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSegment not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateSegment(context.Context, *UpdateSegmentRequest) (*Segment, error) {
+func (UnimplementedFliptServer) UpdateSegment(context.Context, *UpdateSegmentRequest) (*Segment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSegment not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteSegment(context.Context, *DeleteSegmentRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteSegment(context.Context, *DeleteSegmentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSegment not implemented")
 }
-func (UnimplementedFliptServiceServer) CreateConstraint(context.Context, *CreateConstraintRequest) (*Constraint, error) {
+func (UnimplementedFliptServer) CreateConstraint(context.Context, *CreateConstraintRequest) (*Constraint, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateConstraint not implemented")
 }
-func (UnimplementedFliptServiceServer) UpdateConstraint(context.Context, *UpdateConstraintRequest) (*Constraint, error) {
+func (UnimplementedFliptServer) UpdateConstraint(context.Context, *UpdateConstraintRequest) (*Constraint, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConstraint not implemented")
 }
-func (UnimplementedFliptServiceServer) DeleteConstraint(context.Context, *DeleteConstraintRequest) (*emptypb.Empty, error) {
+func (UnimplementedFliptServer) DeleteConstraint(context.Context, *DeleteConstraintRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteConstraint not implemented")
 }
-func (UnimplementedFliptServiceServer) mustEmbedUnimplementedFliptServiceServer() {}
+func (UnimplementedFliptServer) mustEmbedUnimplementedFliptServer() {}
 
-// UnsafeFliptServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FliptServiceServer will
+// UnsafeFliptServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FliptServer will
 // result in compilation errors.
-type UnsafeFliptServiceServer interface {
-	mustEmbedUnimplementedFliptServiceServer()
+type UnsafeFliptServer interface {
+	mustEmbedUnimplementedFliptServer()
 }
 
-func RegisterFliptServiceServer(s grpc.ServiceRegistrar, srv FliptServiceServer) {
-	s.RegisterService(&FliptService_ServiceDesc, srv)
+func RegisterFliptServer(s grpc.ServiceRegistrar, srv FliptServer) {
+	s.RegisterService(&Flipt_ServiceDesc, srv)
 }
 
-func _FliptService_ListFlags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_Evaluate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EvaluationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FliptServer).Evaluate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/flipt.Flipt/Evaluate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FliptServer).Evaluate(ctx, req.(*EvaluationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flipt_BatchEvaluate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchEvaluationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FliptServer).BatchEvaluate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/flipt.Flipt/BatchEvaluate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FliptServer).BatchEvaluate(ctx, req.(*BatchEvaluationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flipt_GetFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FliptServer).GetFlag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/flipt.Flipt/GetFlag",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FliptServer).GetFlag(ctx, req.(*GetFlagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flipt_ListFlags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListFlagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).ListFlags(ctx, in)
+		return srv.(FliptServer).ListFlags(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/ListFlags",
+		FullMethod: "/flipt.Flipt/ListFlags",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).ListFlags(ctx, req.(*ListFlagRequest))
+		return srv.(FliptServer).ListFlags(ctx, req.(*ListFlagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateFlagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateFlag(ctx, in)
+		return srv.(FliptServer).CreateFlag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateFlag",
+		FullMethod: "/flipt.Flipt/CreateFlag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateFlag(ctx, req.(*CreateFlagRequest))
+		return srv.(FliptServer).CreateFlag(ctx, req.(*CreateFlagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateFlagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateFlag(ctx, in)
+		return srv.(FliptServer).UpdateFlag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateFlag",
+		FullMethod: "/flipt.Flipt/UpdateFlag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateFlag(ctx, req.(*UpdateFlagRequest))
+		return srv.(FliptServer).UpdateFlag(ctx, req.(*UpdateFlagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteFlag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteFlagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteFlag(ctx, in)
+		return srv.(FliptServer).DeleteFlag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteFlag",
+		FullMethod: "/flipt.Flipt/DeleteFlag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteFlag(ctx, req.(*DeleteFlagRequest))
+		return srv.(FliptServer).DeleteFlag(ctx, req.(*DeleteFlagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateVariantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateVariant(ctx, in)
+		return srv.(FliptServer).CreateVariant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateVariant",
+		FullMethod: "/flipt.Flipt/CreateVariant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateVariant(ctx, req.(*CreateVariantRequest))
+		return srv.(FliptServer).CreateVariant(ctx, req.(*CreateVariantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateVariantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateVariant(ctx, in)
+		return srv.(FliptServer).UpdateVariant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateVariant",
+		FullMethod: "/flipt.Flipt/UpdateVariant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateVariant(ctx, req.(*UpdateVariantRequest))
+		return srv.(FliptServer).UpdateVariant(ctx, req.(*UpdateVariantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteVariantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteVariant(ctx, in)
+		return srv.(FliptServer).DeleteVariant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteVariant",
+		FullMethod: "/flipt.Flipt/DeleteVariant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteVariant(ctx, req.(*DeleteVariantRequest))
+		return srv.(FliptServer).DeleteVariant(ctx, req.(*DeleteVariantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_GetRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_GetRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).GetRule(ctx, in)
+		return srv.(FliptServer).GetRule(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/GetRule",
+		FullMethod: "/flipt.Flipt/GetRule",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).GetRule(ctx, req.(*GetRuleRequest))
+		return srv.(FliptServer).GetRule(ctx, req.(*GetRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_ListRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_ListRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).ListRules(ctx, in)
+		return srv.(FliptServer).ListRules(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/ListRules",
+		FullMethod: "/flipt.Flipt/ListRules",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).ListRules(ctx, req.(*ListRuleRequest))
+		return srv.(FliptServer).ListRules(ctx, req.(*ListRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_OrderRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_OrderRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OrderRulesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).OrderRules(ctx, in)
+		return srv.(FliptServer).OrderRules(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/OrderRules",
+		FullMethod: "/flipt.Flipt/OrderRules",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).OrderRules(ctx, req.(*OrderRulesRequest))
+		return srv.(FliptServer).OrderRules(ctx, req.(*OrderRulesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateRule(ctx, in)
+		return srv.(FliptServer).CreateRule(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateRule",
+		FullMethod: "/flipt.Flipt/CreateRule",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateRule(ctx, req.(*CreateRuleRequest))
+		return srv.(FliptServer).CreateRule(ctx, req.(*CreateRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateRule(ctx, in)
+		return srv.(FliptServer).UpdateRule(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateRule",
+		FullMethod: "/flipt.Flipt/UpdateRule",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateRule(ctx, req.(*UpdateRuleRequest))
+		return srv.(FliptServer).UpdateRule(ctx, req.(*UpdateRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteRule(ctx, in)
+		return srv.(FliptServer).DeleteRule(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteRule",
+		FullMethod: "/flipt.Flipt/DeleteRule",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteRule(ctx, req.(*DeleteRuleRequest))
+		return srv.(FliptServer).DeleteRule(ctx, req.(*DeleteRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateDistributionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateDistribution(ctx, in)
+		return srv.(FliptServer).CreateDistribution(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateDistribution",
+		FullMethod: "/flipt.Flipt/CreateDistribution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateDistribution(ctx, req.(*CreateDistributionRequest))
+		return srv.(FliptServer).CreateDistribution(ctx, req.(*CreateDistributionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateDistributionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateDistribution(ctx, in)
+		return srv.(FliptServer).UpdateDistribution(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateDistribution",
+		FullMethod: "/flipt.Flipt/UpdateDistribution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateDistribution(ctx, req.(*UpdateDistributionRequest))
+		return srv.(FliptServer).UpdateDistribution(ctx, req.(*UpdateDistributionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteDistribution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteDistributionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteDistribution(ctx, in)
+		return srv.(FliptServer).DeleteDistribution(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteDistribution",
+		FullMethod: "/flipt.Flipt/DeleteDistribution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteDistribution(ctx, req.(*DeleteDistributionRequest))
+		return srv.(FliptServer).DeleteDistribution(ctx, req.(*DeleteDistributionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_GetSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_GetSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetSegmentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).GetSegment(ctx, in)
+		return srv.(FliptServer).GetSegment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/GetSegment",
+		FullMethod: "/flipt.Flipt/GetSegment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).GetSegment(ctx, req.(*GetSegmentRequest))
+		return srv.(FliptServer).GetSegment(ctx, req.(*GetSegmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_ListSegments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_ListSegments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListSegmentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).ListSegments(ctx, in)
+		return srv.(FliptServer).ListSegments(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/ListSegments",
+		FullMethod: "/flipt.Flipt/ListSegments",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).ListSegments(ctx, req.(*ListSegmentRequest))
+		return srv.(FliptServer).ListSegments(ctx, req.(*ListSegmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateSegmentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateSegment(ctx, in)
+		return srv.(FliptServer).CreateSegment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateSegment",
+		FullMethod: "/flipt.Flipt/CreateSegment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateSegment(ctx, req.(*CreateSegmentRequest))
+		return srv.(FliptServer).CreateSegment(ctx, req.(*CreateSegmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateSegmentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateSegment(ctx, in)
+		return srv.(FliptServer).UpdateSegment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateSegment",
+		FullMethod: "/flipt.Flipt/UpdateSegment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateSegment(ctx, req.(*UpdateSegmentRequest))
+		return srv.(FliptServer).UpdateSegment(ctx, req.(*UpdateSegmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteSegment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteSegmentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteSegment(ctx, in)
+		return srv.(FliptServer).DeleteSegment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteSegment",
+		FullMethod: "/flipt.Flipt/DeleteSegment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteSegment(ctx, req.(*DeleteSegmentRequest))
+		return srv.(FliptServer).DeleteSegment(ctx, req.(*DeleteSegmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_CreateConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_CreateConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateConstraintRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).CreateConstraint(ctx, in)
+		return srv.(FliptServer).CreateConstraint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/CreateConstraint",
+		FullMethod: "/flipt.Flipt/CreateConstraint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).CreateConstraint(ctx, req.(*CreateConstraintRequest))
+		return srv.(FliptServer).CreateConstraint(ctx, req.(*CreateConstraintRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_UpdateConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_UpdateConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateConstraintRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).UpdateConstraint(ctx, in)
+		return srv.(FliptServer).UpdateConstraint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/UpdateConstraint",
+		FullMethod: "/flipt.Flipt/UpdateConstraint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).UpdateConstraint(ctx, req.(*UpdateConstraintRequest))
+		return srv.(FliptServer).UpdateConstraint(ctx, req.(*UpdateConstraintRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FliptService_DeleteConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flipt_DeleteConstraint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteConstraintRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FliptServiceServer).DeleteConstraint(ctx, in)
+		return srv.(FliptServer).DeleteConstraint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/flipt.FliptService/DeleteConstraint",
+		FullMethod: "/flipt.Flipt/DeleteConstraint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FliptServiceServer).DeleteConstraint(ctx, req.(*DeleteConstraintRequest))
+		return srv.(FliptServer).DeleteConstraint(ctx, req.(*DeleteConstraintRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// FliptService_ServiceDesc is the grpc.ServiceDesc for FliptService service.
+// Flipt_ServiceDesc is the grpc.ServiceDesc for Flipt service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var FliptService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "flipt.FliptService",
-	HandlerType: (*FliptServiceServer)(nil),
+var Flipt_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "flipt.Flipt",
+	HandlerType: (*FliptServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "Evaluate",
+			Handler:    _Flipt_Evaluate_Handler,
+		},
+		{
+			MethodName: "BatchEvaluate",
+			Handler:    _Flipt_BatchEvaluate_Handler,
+		},
+		{
+			MethodName: "GetFlag",
+			Handler:    _Flipt_GetFlag_Handler,
+		},
+		{
 			MethodName: "ListFlags",
-			Handler:    _FliptService_ListFlags_Handler,
+			Handler:    _Flipt_ListFlags_Handler,
 		},
 		{
 			MethodName: "CreateFlag",
-			Handler:    _FliptService_CreateFlag_Handler,
+			Handler:    _Flipt_CreateFlag_Handler,
 		},
 		{
 			MethodName: "UpdateFlag",
-			Handler:    _FliptService_UpdateFlag_Handler,
+			Handler:    _Flipt_UpdateFlag_Handler,
 		},
 		{
 			MethodName: "DeleteFlag",
-			Handler:    _FliptService_DeleteFlag_Handler,
+			Handler:    _Flipt_DeleteFlag_Handler,
 		},
 		{
 			MethodName: "CreateVariant",
-			Handler:    _FliptService_CreateVariant_Handler,
+			Handler:    _Flipt_CreateVariant_Handler,
 		},
 		{
 			MethodName: "UpdateVariant",
-			Handler:    _FliptService_UpdateVariant_Handler,
+			Handler:    _Flipt_UpdateVariant_Handler,
 		},
 		{
 			MethodName: "DeleteVariant",
-			Handler:    _FliptService_DeleteVariant_Handler,
+			Handler:    _Flipt_DeleteVariant_Handler,
 		},
 		{
 			MethodName: "GetRule",
-			Handler:    _FliptService_GetRule_Handler,
+			Handler:    _Flipt_GetRule_Handler,
 		},
 		{
 			MethodName: "ListRules",
-			Handler:    _FliptService_ListRules_Handler,
+			Handler:    _Flipt_ListRules_Handler,
 		},
 		{
 			MethodName: "OrderRules",
-			Handler:    _FliptService_OrderRules_Handler,
+			Handler:    _Flipt_OrderRules_Handler,
 		},
 		{
 			MethodName: "CreateRule",
-			Handler:    _FliptService_CreateRule_Handler,
+			Handler:    _Flipt_CreateRule_Handler,
 		},
 		{
 			MethodName: "UpdateRule",
-			Handler:    _FliptService_UpdateRule_Handler,
+			Handler:    _Flipt_UpdateRule_Handler,
 		},
 		{
 			MethodName: "DeleteRule",
-			Handler:    _FliptService_DeleteRule_Handler,
+			Handler:    _Flipt_DeleteRule_Handler,
 		},
 		{
 			MethodName: "CreateDistribution",
-			Handler:    _FliptService_CreateDistribution_Handler,
+			Handler:    _Flipt_CreateDistribution_Handler,
 		},
 		{
 			MethodName: "UpdateDistribution",
-			Handler:    _FliptService_UpdateDistribution_Handler,
+			Handler:    _Flipt_UpdateDistribution_Handler,
 		},
 		{
 			MethodName: "DeleteDistribution",
-			Handler:    _FliptService_DeleteDistribution_Handler,
+			Handler:    _Flipt_DeleteDistribution_Handler,
 		},
 		{
 			MethodName: "GetSegment",
-			Handler:    _FliptService_GetSegment_Handler,
+			Handler:    _Flipt_GetSegment_Handler,
 		},
 		{
 			MethodName: "ListSegments",
-			Handler:    _FliptService_ListSegments_Handler,
+			Handler:    _Flipt_ListSegments_Handler,
 		},
 		{
 			MethodName: "CreateSegment",
-			Handler:    _FliptService_CreateSegment_Handler,
+			Handler:    _Flipt_CreateSegment_Handler,
 		},
 		{
 			MethodName: "UpdateSegment",
-			Handler:    _FliptService_UpdateSegment_Handler,
+			Handler:    _Flipt_UpdateSegment_Handler,
 		},
 		{
 			MethodName: "DeleteSegment",
-			Handler:    _FliptService_DeleteSegment_Handler,
+			Handler:    _Flipt_DeleteSegment_Handler,
 		},
 		{
 			MethodName: "CreateConstraint",
-			Handler:    _FliptService_CreateConstraint_Handler,
+			Handler:    _Flipt_CreateConstraint_Handler,
 		},
 		{
 			MethodName: "UpdateConstraint",
-			Handler:    _FliptService_UpdateConstraint_Handler,
+			Handler:    _Flipt_UpdateConstraint_Handler,
 		},
 		{
 			MethodName: "DeleteConstraint",
-			Handler:    _FliptService_DeleteConstraint_Handler,
+			Handler:    _Flipt_DeleteConstraint_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

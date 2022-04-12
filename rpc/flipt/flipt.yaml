@@ -1,74 +1,74 @@
-type: google.api.Service
+type: google.api.
 config_version: 3
 
 http:
   rules:
-  - selector: flipt.FliptEvaluationService.Evaluate
+  - selector: flipt.Flipt.Evaluate
     post: /api/v1/evaluate
     body: "*"
-  - selector: flipt.FliptEvaluationService.BatchEvaluate
+  - selector: flipt.Flipt.BatchEvaluate
     post: /api/v1/batch-evaluate
     body: "*"
-  - selector: flipt.FliptEvaluationService.GetFlag
+  - selector: flipt.Flipt.GetFlag
     get: /api/v1/flags/{key}
-  - selector: flipt.FliptService.ListFlags
+  - selector: flipt.Flipt.ListFlags
     get: /api/v1/flags
-  - selector: flipt.FliptService.CreateFlag
+  - selector: flipt.Flipt.CreateFlag
     post: /api/v1/flags
     body: "*"
-  - selector: flipt.FliptService.UpdateFlag
+  - selector: flipt.Flipt.UpdateFlag
     put: /api/v1/flags/{key}
     body: "*"
-  - selector: flipt.FliptService.DeleteFlag
+  - selector: flipt.Flipt.DeleteFlag
     delete: /api/v1/flags/{key}
-  - selector: flipt.FliptService.CreateVariant
+  - selector: flipt.Flipt.CreateVariant
     post: /api/v1/flags/{flag_key}/variants
     body: "*"
-  - selector: flipt.FliptService.UpdateVariant
+  - selector: flipt.Flipt.UpdateVariant
     put: /api/v1/flags/{flag_key}/variants/{id}
     body: "*"
-  - selector: flipt.FliptService.DeleteVariant
+  - selector: flipt.Flipt.DeleteVariant
     delete: /api/v1/flags/{flag_key}/variants/{id}
-  - selector: flipt.FliptService.GetRule
+  - selector: flipt.Flipt.GetRule
     get: /api/v1/flags/{flag_key}/rules/{id}
-  - selector: flipt.FliptService.OrderRules
+  - selector: flipt.Flipt.OrderRules
     put: /api/v1/flags/{flag_key}/rules/order
     body: "*"
-  - selector: flipt.FliptService.ListRules
+  - selector: flipt.Flipt.ListRules
     get: /api/v1/flags/{flag_key}/rules
-  - selector: flipt.FliptService.CreateRule
+  - selector: flipt.Flipt.CreateRule
     post: /api/v1/flags/{flag_key}/rules
     body: "*"
-  - selector: flipt.FliptService.UpdateRule
+  - selector: flipt.Flipt.UpdateRule
     put: /api/v1/flags/{flag_key}/rules/{id}
     body: "*"
-  - selector: flipt.FliptService.DeleteRule
+  - selector: flipt.Flipt.DeleteRule
     delete: /api/v1/flags/{flag_key}/rules/{id}
-  - selector: flipt.FliptService.CreateDistribution
+  - selector: flipt.Flipt.CreateDistribution
     post: "/api/v1/flags/{flag_key}/rules/{rule_id}/distributions"
     body: "*"
-  - selector: flipt.FliptService.UpdateDistribution
+  - selector: flipt.Flipt.UpdateDistribution
     put: "/api/v1/flags/{flag_key}/rules/{rule_id}/distributions/{id}"
     body: "*"
-  - selector: flipt.FliptService.DeleteDistribution
+  - selector: flipt.Flipt.DeleteDistribution
     delete: "/api/v1/flags/{flag_key}/rules/{rule_id}/distributions/{id}"
-  - selector: flipt.FliptService.GetSegment
+  - selector: flipt.Flipt.GetSegment
     get: /api/v1/segments/{key}
-  - selector: flipt.FliptService.ListSegments
+  - selector: flipt.Flipt.ListSegments
     get: /api/v1/segments
-  - selector: flipt.FliptService.CreateSegment
+  - selector: flipt.Flipt.CreateSegment
     post: /api/v1/segments
     body: "*"
-  - selector: flipt.FliptService.UpdateSegment
+  - selector: flipt.Flipt.UpdateSegment
     put: /api/v1/segments/{key}
     body: "*"
-  - selector: flipt.FliptService.DeleteSegment
+  - selector: flipt.Flipt.DeleteSegment
     delete: /api/v1/segments/{key}
-  - selector: flipt.FliptService.CreateConstraint
+  - selector: flipt.Flipt.CreateConstraint
     post: /api/v1/segments/{segment_key}/constraints
     body: "*"
-  - selector: flipt.FliptService.UpdateConstraint
+  - selector: flipt.Flipt.UpdateConstraint
     put: /api/v1/segments/{segment_key}/constraints/{id}
     body: "*"
-  - selector: flipt.FliptService.DeleteConstraint
+  - selector: flipt.Flipt.DeleteConstraint
     delete: /api/v1/segments/{segment_key}/constraints/{id}
