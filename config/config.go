@@ -50,16 +50,14 @@ type CacheConfig struct {
 }
 
 type ServerConfig struct {
-	Host                string `json:"host,omitempty"`
-	Protocol            Scheme `json:"protocol,omitempty"`
-	HTTPPort            int    `json:"httpPort,omitempty"`
-	HTTPSPort           int    `json:"httpsPort,omitempty"`
-	GRPCPort            int    `json:"grpcPort,omitempty"`
-	EvaluationHTTPPort  int    `json:"evaluationHttpPort,omitempty"`
-	EvaluationHTTPSPort int    `json:"evaluationHttpsPort,omitempty"`
-	EvaluationGRPCPort  int    `json:"evaluationGrpcPort,omitempty"`
-	CertFile            string `json:"certFile,omitempty"`
-	CertKey             string `json:"certKey,omitempty"`
+	Host      string `json:"host,omitempty"`
+	Protocol  Scheme `json:"protocol,omitempty"`
+	HTTPPort  int    `json:"httpPort,omitempty"`
+	HTTPSPort int    `json:"httpsPort,omitempty"`
+	GRPCPort  int    `json:"grpcPort,omitempty"`
+	CertFile  string `json:"certFile,omitempty"`
+	CertKey   string `json:"certKey,omitempty"`
+	Mode      Mode   `json:"mode,omitempty"`
 }
 
 type JaegerTracingConfig struct {
@@ -124,6 +122,29 @@ type MetaConfig struct {
 	StateDirectory   string `json:"stateDirectory"`
 }
 
+type Mode uint
+
+func (m Mode) String() string {
+	return modeToString[m]
+}
+
+const (
+	DefaultMode Mode = iota
+	ReadOnlyMode
+)
+
+var (
+	modeToString = map[Mode]string{
+		DefaultMode:  "default",
+		ReadOnlyMode: "readonly",
+	}
+
+	stringToMode = map[string]Mode{
+		"default":  DefaultMode,
+		"readonly": ReadOnlyMode,
+	}
+)
+
 type Scheme uint
 
 func (s Scheme) String() string {
@@ -171,6 +192,7 @@ func Default() *Config {
 		},
 
 		Server: ServerConfig{
+			Mode:      DefaultMode,
 			Host:      "0.0.0.0",
 			Protocol:  HTTP,
 			HTTPPort:  8080,
@@ -225,6 +247,7 @@ const (
 	serverGRPCPort  = "server.grpc_port"
 	serverCertFile  = "server.cert_file"
 	serverCertKey   = "server.cert_key"
+	serverMode      = "server.mode"
 
 	// Tracing
 	tracingJaegerEnabled = "tracing.jaeger.enabled"
@@ -299,6 +322,10 @@ func Load(path string) (*Config, error) {
 	}
 
 	// Server
+	if viper.IsSet(serverMode) {
+		cfg.Server.Mode = stringToMode[viper.GetString(serverMode)]
+	}
+
 	if viper.IsSet(serverHost) {
 		cfg.Server.Host = viper.GetString(serverHost)
 	}

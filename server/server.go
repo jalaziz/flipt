@@ -52,7 +52,7 @@ func (s *Server) ValidationUnaryInterceptor(ctx context.Context, req interface{}
 	return handler(ctx, req)
 }
 
-func (s *Server) EvaluationOnlyUnaryInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+func (s *Server) ReadOnlyModeInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 	return nil, nil
 }
 

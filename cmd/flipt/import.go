@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"syscall"
 
+	"github.com/markphelps/flipt/config"
 	"github.com/markphelps/flipt/internal/ext"
 	"github.com/markphelps/flipt/storage"
 	"github.com/markphelps/flipt/storage/sql"
@@ -24,6 +25,10 @@ var (
 )
 
 func runImport(args []string) error {
+	if mode == config.ReadOnlyMode {
+		return errors.New("import is disabled in read-only mode")
+	}
+
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 

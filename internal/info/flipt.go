@@ -13,6 +13,7 @@ type Flipt struct {
 	GoVersion       string `json:"goVersion,omitempty"`
 	UpdateAvailable bool   `json:"updateAvailable"`
 	IsRelease       bool   `json:"isRelease"`
+	Mode            string `json:"mode,omitempty"`
 }
 
 func (f Flipt) ServeHTTP(w http.ResponseWriter, r *http.Request) {

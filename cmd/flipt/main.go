@@ -69,8 +69,7 @@ var (
 	l   = logrus.New()
 	cfg *config.Config
 
-	cfgPath      string
-	forceMigrate bool
+	cfgPath string
 
 	version      = devVersion
 	commit       string
@@ -78,6 +77,7 @@ var (
 	goVersion    = runtime.Version()
 	analyticsKey string
 	banner       string
+	mode         config.Mode
 )
 
 func main() {
@@ -123,15 +123,7 @@ func main() {
 			Use:   "migrate",
 			Short: "Run pending database migrations",
 			Run: func(cmd *cobra.Command, args []string) {
-				migrator, err := sql.NewMigrator(*cfg, l)
-				if err != nil {
-					logrus.Error(err)
-					logrus.Exit(1)
-				}
-
-				defer migrator.Close()
-
-				if err := migrator.Run(true); err != nil {
+				if err := runMigrate(args); err != nil {
 					logrus.Error(err)
 					logrus.Exit(1)
 				}
@@ -229,6 +221,8 @@ func run(_ []string) error {
 
 	defer signal.Stop(interrupt)
 
+	mode = cfg.Server.Mode
+
 	var (
 		isRelease       = isRelease()
 		updateAvailable bool
@@ -278,6 +272,13 @@ func run(_ []string) error {
 		LatestVersion:   lv.String(),
 		IsRelease:       isRelease,
 		UpdateAvailable: updateAvailable,
+		Mode:            mode.String(),
+	}
+
+	if mode == config.DefaultMode {
+		l.Debug("running in default mode")
+	} else {
+		l.Warnf("running in %s mode", mode.String())
 	}
 
 	if os.Getenv("CI") == "true" || os.Getenv("CI") == "1" {
@@ -344,18 +345,21 @@ func run(_ []string) error {
 	g.Go(func() error {
 		logger := l.WithField("server", "grpc")
 
-		migrator, err := sql.NewMigrator(*cfg, l)
-		if err != nil {
-			return err
+		// do not run migrations in read-only mode
+		if mode != config.ReadOnlyMode {
+			migrator, err := sql.NewMigrator(*cfg, l)
+			if err != nil {
+				return err
+			}
+
+			defer migrator.Close()
+
+			if err := migrator.Run(forceMigrate); err != nil {
+				return err
+			}
+
+			migrator.Close()
 		}
-
-		defer migrator.Close()
-
-		if err := migrator.Run(forceMigrate); err != nil {
-			return err
-		}
-
-		migrator.Close()
 
 		lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.GRPCPort))
 		if err != nil {
@@ -447,6 +451,10 @@ func run(_ []string) error {
 			}
 
 			grpcOpts = append(grpcOpts, grpc.Creds(creds))
+		}
+
+		if mode == config.ReadOnlyMode {
+			grpcOpts = append(grpcOpts, grpc.UnaryInterceptor(srv.ReadOnlyModeInterceptor))
 		}
 
 		grpcServer = grpc.NewServer(grpcOpts...)
