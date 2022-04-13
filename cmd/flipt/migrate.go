@@ -10,7 +10,7 @@ import (
 
 var forceMigrate bool
 
-func runMigrate(args []string) error {
+func runMigrate(_ []string) error {
 	if mode == config.ReadOnlyMode {
 		return errors.New("migrate is disabled in read-only mode")
 	}

@@ -84,7 +84,7 @@ func main() {
 	var (
 		rootCmd = &cobra.Command{
 			Use:     "flipt",
-			Short:   "Flipt is a modern feature flag solution",
+			Short:   "Flipt is an on-premise feature flag solution",
 			Version: version,
 			Run: func(cmd *cobra.Command, args []string) {
 				if err := run(args); err != nil {
@@ -278,7 +278,7 @@ func run(_ []string) error {
 	if mode == config.DefaultMode {
 		l.Debug("running in default mode")
 	} else {
-		l.Warnf("running in %s mode", mode.String())
+		l.Warnf("running in %q mode", mode.String())
 	}
 
 	if os.Getenv("CI") == "true" || os.Getenv("CI") == "1" {
